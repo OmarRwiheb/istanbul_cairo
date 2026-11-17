@@ -135,17 +135,12 @@ export function AddSongDialog() {
                   </p>
                 </div>
 
+                <input type="hidden" name="artist" value={metadata.artist} />
+
                 <input
                   name="title"
                   defaultValue={metadata.title}
                   placeholder="Song title"
-                  required
-                  className="rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-[#7a7a82] outline-none focus:border-[#8a5cf6]"
-                />
-                <input
-                  name="artist"
-                  defaultValue={metadata.artist}
-                  placeholder="Artist"
                   required
                   className="rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-[#7a7a82] outline-none focus:border-[#8a5cf6]"
                 />

@@ -13,7 +13,7 @@ export async function addSong(formData: FormData): Promise<AddSongResult> {
   const url = String(formData.get("url") ?? "").trim();
   const artworkUrl = String(formData.get("artwork_url") ?? "").trim();
 
-  if (!title || !artist || !provider || !url) {
+  if (!title || !provider || !url) {
     return { error: "Please fill in all required fields." };
   }
 
