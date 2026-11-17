@@ -53,17 +53,31 @@ export async function fetchSongMetadata(
 
   try {
     if (provider === "spotify") {
-      const res = await fetch(
-        `https://open.spotify.com/oembed?url=${encodeURIComponent(url.toString())}`
-      );
-      if (!res.ok) throw new Error("lookup failed");
-      const data = await res.json();
-      const { artist, title } = splitArtistTitle(data.title ?? "", "");
+      const [oembedRes, pageRes] = await Promise.all([
+        fetch(
+          `https://open.spotify.com/oembed?url=${encodeURIComponent(url.toString())}`
+        ),
+        fetch(url.toString()),
+      ]);
+      if (!oembedRes.ok) throw new Error("lookup failed");
+      const data = await oembedRes.json();
+
+      let artist = "";
+      if (pageRes.ok) {
+        const html = await pageRes.text();
+        const match = html.match(
+          /property="og:description" content="([^"]*)"/
+        );
+        if (match) {
+          artist = match[1].split("·")[0].trim();
+        }
+      }
+
       return {
         error: null,
         metadata: {
           provider,
-          title: title || data.title || "",
+          title: data.title ?? "",
           artist,
           artworkUrl: data.thumbnail_url ?? null,
         },
